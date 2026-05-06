@@ -1,0 +1,12 @@
+{
+    "name": "codespace/task-master",
+    "authors": [
+        {
+            "name": "vitória",
+            "email": "112172698+VitoriaBarroso@users.noreply.github.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}

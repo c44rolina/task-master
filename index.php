@@ -1,7 +1,7 @@
 <?php
-// 1. AUTOLOAD: Para não precisar de 'require' em todo lugar
+// Atualizamos o Autoload para incluir a pasta Presenter
 spl_autoload_register(function ($class) {
-    $dirs = ['Model', 'Controller']; 
+    $dirs = ['Model', 'Presenter', 'View'];
     foreach ($dirs as $dir) {
         $file = __DIR__ . "/src/$dir/$class.php";
         if (file_exists($file)) {
@@ -13,12 +13,29 @@ spl_autoload_register(function ($class) {
 $pdo = new PDO('sqlite:' . __DIR__ . '/tasks.sqlite');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// 3. ROTEAMENTO: Onde a mágica acontece
-$controller = new TaskController($pdo);
-$action = $_GET['action'] ?? 'index'; // Pega a ação da URL
+// 1. Instanciamos o Model
+$model = new Task($pdo);
 
-if (method_exists($controller, $action)) {
-    $controller->$action(); 
+// 2. Instanciamos a View (que implementa TaskViewInterface)
+$view = new TaskHtmlView();
+
+// 3. Instanciamos o Presenter, injetando as dependências
+$presenter = new TaskPresenter($model, $view);
+
+// Roteamento
+$action = $_GET['action'] ?? 'index';
+
+if ($action === 'create') {
+    $presenter->create(
+        $_POST['title'] ?? '',
+        $_POST['description'] ?? '',
+        $_POST['due_date'] ?? '',
+        $_POST['responsible'] ?? ''
+    );
+} elseif ($action === 'complete') {
+    $presenter->complete($_GET['id'] ?? null);
+} elseif ($action === 'delete') {
+    $presenter->delete($_GET['id'] ?? null);
 } else {
-    echo "Página não encontrada 404";
+    $presenter->index();
 }

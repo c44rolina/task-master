@@ -3,7 +3,7 @@
         'name' => 'codespace/task-master',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '06b0e1880b1637aea605c65ddee203e698e4c40d',
+        'reference' => '745571affbc352aedc99712a4645500ec4382bfd',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'codespace/task-master' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '06b0e1880b1637aea605c65ddee203e698e4c40d',
+            'reference' => '745571affbc352aedc99712a4645500ec4382bfd',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

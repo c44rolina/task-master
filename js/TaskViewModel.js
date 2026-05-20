@@ -9,6 +9,8 @@ class TaskViewModel {
         // Mapeia elementos da View
         this.listElement = document.getElementById('taskList');
         this.inputElement = document.getElementById('taskTitle');
+        this.dueDateElement = document.getElementById('taskDueDate');
+        this.responsibleElement = document.getElementById('taskResponsible');
         this.addBtn = document.getElementById('addBtn');
 
         // Eventos da View que disparam ações na ViewModel
@@ -25,21 +27,31 @@ class TaskViewModel {
             console.error('Erro ao buscar tarefas', response.status);
             return;
         }
-        this.tasks = await response.json();
+        this.tasks = (await response.json()).map(task => ({
+            ...task,
+            done: Number(task.done) === 1
+        }));
         this.render(); // Atualiza a View (Data Binding)
     }
 
     async addTask() {
         const title = this.inputElement.value;
-        if (!title) return alert("Digite algo!");
+        const dueDate = this.dueDateElement.value;
+        const responsible = this.responsibleElement.value;
+
+        if (!title || !dueDate || !responsible) {
+            return alert("Preencha título, data e responsável.");
+        }
 
         await fetch('api.php?action=create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: title, description: '', due_date: '' })
+            body: JSON.stringify({ title: title, description: '', due_date: dueDate, responsible: responsible })
         });
 
         this.inputElement.value = '';
+        this.dueDateElement.value = '';
+        this.responsibleElement.value = '';
         await this.fetchTasks();
     }
 
@@ -61,8 +73,8 @@ class TaskViewModel {
             li.className = task.done ? 'done' : '';
             li.innerHTML = `
                 <span>${task.title}</span>
-                <button onclick="vm.completeTask(${task.id})">✔️</button>
-                <button onclick="vm.deleteTask(${task.id})">❌</button>
+                <button class="complete" onclick="vm.completeTask(${task.id})">✔️</button>
+                <button class="delete" onclick="vm.deleteTask(${task.id})">❌</button>
             `;
             this.listElement.appendChild(li);
         });

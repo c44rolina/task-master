@@ -1,1 +1,0 @@
-index.php foi renomeado para index.php.bak e removido do root. Original move realizado por script.

@@ -20,7 +20,12 @@ try {
         case 'create':
             // Recebe dados JSON do Front-end
             $data = json_decode(file_get_contents('php://input'), true);
-            $model->save($data['title'] ?? '', $data['description'] ?? '', $data['due_date'] ?? '');
+            $model->save(
+                $data['title'] ?? '',
+                $data['description'] ?? '',
+                $data['due_date'] ?? '',
+                $data['responsible'] ?? ''
+            );
             echo json_encode(['status' => 'success']);
             break;
 
